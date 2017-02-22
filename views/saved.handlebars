@@ -13,32 +13,30 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
-                <li><a href="/saved">Saved Articles</a></li>
+                <li><a href="/">Home <span class="sr-only">(current)</span></a></li>
+                <li class="active"><a href="/saved">Saved Articles</a></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
     </div>
-        <!-- /.container-fluid -->
+    <!-- /.container-fluid -->
 </nav>
+
 <div class="container">
-    {{!-- Jumbotron --}}
+
     <div class="jumbotron">
-        <h1>Mongo Scraper</h1>
-        <p>NPR News</p>
-        <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Articles</a></p>
+        <h1>Saved Articles</h1>
+        <p>Your Saved Articles</p>
     </div>
     {{!-- Panels --}}
     {{#each articles}}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title pull-left">{{this.title}}</h3>
-            <button type="button" class="btn btn-success pull-right">Save Article</button>
-            <div class="clearfix"></div>
+            <h3 class="panel-title">{{this.title}}</h3>
         </div>
         <div class="panel-body">
             <p>{{this.blurb}}</p>
-            <p><a href="{{this.link}}" target="blank">Link to Article</a></p>
+            <p>Link to Article: {{this.link}}</p>
         </div>
     </div>
     {{/each}}

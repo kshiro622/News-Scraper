@@ -1,11 +1,7 @@
 // Dependencies
 var express = require("express");
-var mongojs = require("mongojs");
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
-// Require request and cheerio. This makes the scraping possible
-var request = require("request");
-var cheerio = require("cheerio");
 // Require mongoose. This helps in saving data to db.
 var mongoose = require("mongoose");
 
@@ -23,22 +19,20 @@ app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-// Serve static content for the app from the "public" directory in the application directory.
-app.use(express.static(__dirname + '/public'));
+// Set up a static folder (public) for our web app
+app.use(express.static("public"));
 
-// Database configuration
-var databaseUrl = "scraper";
-var collections = ["scrapedData"];
+// mongoose.connect('mongodb://localhost/news_db');
+// // Hook mongojs configuration to the db variable
+// var db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function() {
+//     console.log("Connected.");
+// });
 
-// Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
-db.on("error", function(error) {
-    console.log("Database Error:", error);
-});
 
 // Routes
 require("./controllers/scraper_controller.js")(app);
-
 
 // Scrape data and store in db
 
