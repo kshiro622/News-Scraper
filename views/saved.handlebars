@@ -1,6 +1,6 @@
+{{!-- Nav --}}
 <nav class="navbar navbar-default">
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
@@ -10,34 +10,66 @@
             </button>
             <a class="navbar-brand" href="#">Mongo News Scraper</a>
         </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Collect content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="/">Home <span class="sr-only">(current)</span></a></li>
                 <li class="active"><a href="/saved">Saved Articles</a></li>
             </ul>
         </div>
-        <!-- /.navbar-collapse -->
     </div>
-    <!-- /.container-fluid -->
 </nav>
 
+{{!-- Main --}}
 <div class="container">
 
+    {{!-- Jumbotron --}}
     <div class="jumbotron">
         <h1>Saved Articles</h1>
         <p>Your Saved Articles</p>
     </div>
-    {{!-- Panels --}}
-    {{#each articles}}
+
+    {{!-- Panel for each saved article --}}
+    {{#each savedArticles}}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{{this.title}}</h3>
+            <h3 class="panel-title pull-left">{{this.title}}</h3>
+            <form action="/api/article/remove/:{{this.id}}?_method=PUT" method="POST">
+                <input type="hidden" name="id" value={{this.id}}>
+                <button class="btn btn-danger pull-right" type="submit">Remove From Saved</button>
+             </form> 
+            <button type="button" class="article-notes btn btn-warning" id={{this.id}} data-title="{{this.title}}">Article Notes</button>
+            <div class="clearfix"></div>
         </div>
         <div class="panel-body">
             <p>{{this.blurb}}</p>
-            <p>Link to Article: {{this.link}}</p>
+            <p><a href="{{this.link}}" target="blank">Link to Article</a></p>
         </div>
     </div>
     {{/each}}
 </div>
+
+{{!-- Modal --}}
+<div class="modal fade" tabindex="-1" role="dialog" id="comment-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <form class="form-inline">
+                    <div class="form-group pull-left">
+                        <label for="comment">New Note</label>
+                        <input type="text" class="form-control" id="comment">
+                    </div>
+                    <button type="submit" class="btn btn-success">Save Note</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{{!-- JavaScript --}}
+<script type="text/javascript" src="/js/script.js"></script>

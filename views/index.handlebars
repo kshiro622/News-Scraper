@@ -1,6 +1,6 @@
+{{!-- Nav --}}
 <nav class="navbar navbar-default">
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
@@ -10,30 +10,35 @@
             </button>
             <a class="navbar-brand" href="#">Mongo News Scraper</a>
         </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Collect content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
                 <li><a href="/saved">Saved Articles</a></li>
             </ul>
         </div>
-        <!-- /.navbar-collapse -->
     </div>
-        <!-- /.container-fluid -->
 </nav>
+
+{{!-- Main --}}
 <div class="container">
+
     {{!-- Jumbotron --}}
     <div class="jumbotron">
         <h1>Mongo Scraper</h1>
         <p>NPR News</p>
         <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Articles</a></p>
     </div>
-    {{!-- Panels --}}
+
+    {{!-- Panel for each scraped article --}}
     {{#each articles}}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title pull-left">{{this.title}}</h3>
-            <button type="button" class="btn btn-success pull-right">Save Article</button>
+            <form action="/api/article/save/:{{this.id}}?_method=PUT" method="POST">
+                <input type="hidden" name="id" value={{this.id}}>
+                <button class="btn btn-success pull-right" type="submit">Save Article</button>
+             </form> 
             <div class="clearfix"></div>
         </div>
         <div class="panel-body">
@@ -42,4 +47,5 @@
         </div>
     </div>
     {{/each}}
+    
 </div>
