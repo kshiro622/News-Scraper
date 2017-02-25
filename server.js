@@ -6,7 +6,7 @@ var methodOverride = require('method-override');
 var mongoose = require("mongoose");
 
 // Set up db
-mongoose.connect('mongodb://localhost/news_db');
+mongoose.connect('mongodb://heroku_q4t0bt76:6veksvknmr4f8q6ec7clegqkl2@ds161059.mlab.com:61059/heroku_q4t0bt76');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
