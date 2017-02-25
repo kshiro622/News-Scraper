@@ -13,9 +13,9 @@
         <!-- Collect content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="/">Home <span class="sr-only">(current)</span></a></li>
                 <li><a href="/saved">Saved Articles</a></li>
-                <li><a href="/saved/notes">Article Notes</a></li>
+                <li class="active"><a href="/saved/notes">Article Notes</a></li>
             </ul>
         </div>
     </div>
@@ -26,27 +26,39 @@
 
     {{!-- Jumbotron --}}
     <div class="jumbotron">
-        <h1>Mongo Scraper</h1>
-        <img src="/images/npr.png" alt="NPR News" height="70px">
-        <p><a class="btn btn-info btn-lg" href="/scrape" role="button">Scrape New Articles</a></p>
+        <h1>Article Notes</h1>
+        <p>Your Comments on Saved Articles</p>
     </div>
 
-    {{!-- Panel for each scraped article --}}
+    {{!-- Panel for each saved article --}}
     {{#each articles}}
+    {{#if comments}}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title pull-left">{{this.title}}</h3>
-            <form action="/api/article/save/:{{this.id}}?_method=PUT" method="POST">
-                <input type="hidden" name="id" value={{this.id}}>
-                <button class="btn btn-success pull-right" type="submit">Save Article</button>
-             </form> 
-            <div class="clearfix"></div>
+            <h3 class="panel-title">{{this.title}}</h3>
         </div>
         <div class="panel-body">
-            <p>{{this.blurb}}</p>
+            {{#each this.comments}}
+                <p>{{this.comment}}
+                    <button type="button" class="close" 
+                    aria-label="Close"><span aria-hidden="true" class="remove-comment" id={{this.id}} data-articleId="{{this.articleId}}">&times;</span>
+                    </button>
+                </p>
+            {{/each}}
+        </div>
+        <div class="panel-footer">
             <p><a href="{{this.link}}" target="blank">Link to Article</a></p>
         </div>
     </div>
+    {{/if}}
     {{/each}}
 
+    {{#unless comments}}
+        <div class="panel panel-default">
+            <div class="panel-body">No notes to display.</div>
+        </div>
+    {{/unless}}
 </div>
+
+{{!-- JavaScript --}}
+<script type="text/javascript" src="/js/script.js"></script>

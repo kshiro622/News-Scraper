@@ -6,7 +6,7 @@ var articleSchema = new Schema({
     title: String,
     link: String,
     blurb: String,
-    comments: [{ comment: String }],
+    comments: [{ comment: String, articleId: Schema.Types.ObjectId }],
     saved: Boolean,
     time: { type: Date, default: Date.now }
 });

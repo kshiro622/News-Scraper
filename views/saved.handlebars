@@ -15,6 +15,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="/">Home <span class="sr-only">(current)</span></a></li>
                 <li class="active"><a href="/saved">Saved Articles</a></li>
+                <li><a href="/saved/notes">Article Notes</a></li>
             </ul>
         </div>
     </div>
@@ -31,22 +32,29 @@
 
     {{!-- Panel for each saved article --}}
     {{#each savedArticles}}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title pull-left">{{this.title}}</h3>
-            <form action="/api/article/remove/:{{this.id}}?_method=PUT" method="POST">
-                <input type="hidden" name="id" value={{this.id}}>
-                <button class="btn btn-danger pull-right" type="submit">Remove From Saved</button>
-             </form> 
-            <button type="button" class="article-notes btn btn-warning" id={{this.id}} data-title="{{this.title}}">Article Notes</button>
-            <div class="clearfix"></div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title pull-left">{{this.title}}</h3>
+                <form action="/api/article/remove/:{{this.id}}?_method=PUT" method="POST">
+                    <input type="hidden" name="id" value={{this.id}}>
+                    <button class="btn btn-danger pull-right" type="submit">Remove From Saved</button>
+                </form> 
+                <button type="button" class="article-notes btn btn-warning" id={{this.id}} data-title="{{this.title}}">Add Note</button>
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-body">
+                <p>{{this.blurb}}</p>
+                <p><a href="{{this.link}}" target="blank">Link to Article</a></p>
+            </div>
         </div>
-        <div class="panel-body">
-            <p>{{this.blurb}}</p>
-            <p><a href="{{this.link}}" target="blank">Link to Article</a></p>
-        </div>
-    </div>
     {{/each}}
+
+    {{#unless savedArticles}}
+        <div class="panel panel-default">
+            <div class="panel-body">You have no saved articles.</div>
+        </div>
+    {{/unless}}
+
 </div>
 
 {{!-- Modal --}}
@@ -64,7 +72,7 @@
                         <label for="comment">New Note</label>
                         <input type="text" class="form-control" id="comment">
                     </div>
-                    <button type="submit" class="btn btn-success">Save Note</button>
+                    <button type="submit" class="btn btn-success" id="save-note-btn">Save Note</button>
                 </form>
             </div>
         </div><!-- /.modal-content -->

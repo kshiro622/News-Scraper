@@ -26,13 +26,21 @@ module.exports = function(app) {
             });
     });
 
+    // GET route to render comments page
+    app.get("/saved/notes", function(req, res) {
+        Article.find({ "saved": true }).sort('+time').exec(
+            function(err, docs) {
+                res.render("comments", { articles: docs });
+            });
+    });
+
     // Route to update article saved status to true
     app.put("/api/article/save/:id", function(req, res) {
         Article.update({ _id: req.body.id }, { $set: { saved: true } }, function(err, docs) {
             if (err) {
                 console.log(err);
             }
-            console.log(req.body.id);
+            res.redirect("/saved");
         });
     });
 
@@ -42,9 +50,38 @@ module.exports = function(app) {
             if (err) {
                 console.log(err);
             }
-            console.log(req.body.id);
             res.redirect("/saved");
         });
+    });
+
+    // Route to add comment
+    app.put("/saved/save_comment", function(req, res) {
+        Article.update({ _id: req.body.id }, {
+                $push: { "comments": { comment: req.body.comment, articleId: req.body.id } }
+            },
+            function(err, docs) {
+                if (err) {
+                    res.send('fail');
+                } else {
+                    res.send('pass');
+                }
+            });
+
+    });
+
+    // Route to delete comment
+    app.put("/saved/delete_comment", function(req, res) {
+        Article.update({ _id: req.body.articleId }, {
+                $pull: { "comments": { _id: req.body.id } }
+            },
+            function(err, response) {
+                if (err) {
+                    res.send('fail');
+                } else {
+                    res.send('pass');
+                }
+            });
+
     });
 
     // Scrape data from npr news and place it into the mongodb db
