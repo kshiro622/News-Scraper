@@ -3,8 +3,6 @@ var request = require("request");
 var cheerio = require("cheerio");
 var Article = require("../models/article.js");
 var mongoose = require("mongoose");
-
-// Set mongoose to leverage built in JavaScript ES6 Promises
 mongoose.Promise = Promise;
 
 // Routes
@@ -87,6 +85,8 @@ module.exports = function(app) {
     // Scrape data from npr news and place it into the mongodb db
     app.get("/scrape", function(req, res) {
 
+        var articles = [];
+        var promises = [];
         request("http://www.npr.org/sections/news/", function(error, response, html) {
             // Load the html body from request into cheerio
             var $ = cheerio.load(html);
@@ -96,24 +96,40 @@ module.exports = function(app) {
                 var link = $(this).children(".title").children("a").attr("href");
                 var blurb = $(this).children(".teaser").children("a").text();
 
-                Article.find({ "title": title },
-                    function(err, docs) {
-                        if (docs.length === 0) {
-                            var newArticle = new Article({
-                                title: title,
-                                link: link,
-                                blurb: blurb,
-                                comments: [],
-                                saved: false
-                            });
-                            newArticle.save(function(err, newArticles) {
-                                if (err) return console.error(err);
-                            });
+                articles.push({ title: title, link: link, blurb: blurb });
 
-
-                        }
-                    });
+            });
+            for (var k = 0; k < articles.length; k++) {
+                promises.push(saveArticle(articles[k].title, articles[k].link, articles[k].blurb));
+            }
+            Promise.all(promises).then(function() {
+                res.redirect("/");
             });
         });
     });
+
+
+    // 
+    function saveArticle(title, link, blurb) {
+        return new Promise(function(resolve, reject) {
+            Article.find({ "title": title },
+                function(err, docs) {
+                    if (docs.length === 0) {
+                        var newArticle = new Article({
+                            title: title,
+                            link: link,
+                            blurb: blurb,
+                            comments: [],
+                            saved: false
+                        });
+                        newArticle.save(function(err, newArticles) {
+                            if (err) return console.error(err);
+                            resolve();
+                        });
+                    }
+                    resolve();
+                });
+
+        });
+    }
 };

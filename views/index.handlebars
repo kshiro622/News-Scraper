@@ -49,4 +49,11 @@
     </div>
     {{/each}}
 
+    {{!-- Panel to display if there are no articles in the database --}}
+    {{#unless articles}}
+        <div class="panel panel-default">
+            <div class="panel-body">No articles have been scraped.</div>
+        </div>
+    {{/unless}}
+
 </div>
