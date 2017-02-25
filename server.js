@@ -16,16 +16,13 @@ db.once('open', function() {
 
 // Initialize Express
 var app = express();
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 8080;
 
 // Sets up the Express app to handle data parsing
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: "application/vnd.api+json" }));
-
-// Set up a static folder (public) for our web app
-app.use(express.static(__dirname + "/public"));
 
 // Favicon
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
@@ -36,6 +33,9 @@ app.use(methodOverride('_method'));
 // Set Handlebars.
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
+
+// Set up a static folder (public) for our web app
+app.use(express.static("public"));
 
 // Routes
 require("./controllers/scraper_controller.js")(app);
