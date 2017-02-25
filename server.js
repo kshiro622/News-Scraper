@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var methodOverride = require('method-override');
 var mongoose = require("mongoose");
+var favicon = require("serve-favicon");
 
 // Set up db
 mongoose.connect('mongodb://heroku_q4t0bt76:6veksvknmr4f8q6ec7clegqkl2@ds161059.mlab.com:61059/heroku_q4t0bt76');
@@ -25,6 +26,9 @@ app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 
 // Override with POST having ?_method=DELETE
 app.use(methodOverride('_method'));
+
+// Favicon
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 // Set Handlebars.
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
